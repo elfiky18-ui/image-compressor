@@ -159,7 +159,7 @@
 </head>
 <body>
 
-    <!-- Panda Logo (Exact Original from Mobile Screenshot) -->
+    <!-- Panda Logo (The Very Original First One) -->
     <svg class="panda-logo" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
         <path d="M 40 40 C 20 40 20 70 40 70 C 60 70 60 40 40 40 Z" fill="#000"/>
         <path d="M 160 40 C 140 40 140 70 160 70 C 180 70 180 40 160 40 Z" fill="#000"/>
@@ -244,8 +244,8 @@
                     let width = img.width;
                     let height = img.height;
 
-                    let qualityValue = 0.80; 
-                    let scaleFactor = 0.90; // خصم 10% من الأبعاد والحجم لضمان النزول الحقيقي للنورمال
+                    let qualityValue = 0.82; 
+                    let scaleFactor = 0.90; 
 
                     if (selectedQuality === 'normal') {
                         qualityValue = 0.82; 
@@ -272,9 +272,7 @@
                         if (!blob) return;
 
                         let finalBlob = blob;
-                        // ضمان إضافي: لو الحجم الناتج في النورمال طلع بيساوي أو أكبر من الأصلي، بنجبره يصغر أكتر
                         if (selectedQuality === 'normal' && finalBlob.size >= selectedFile.size) {
-                            // إعادة المعالجة بجودة أشد قليلاً لضمان نزول الحجم 10% فعلياً
                             canvas.toBlob(function (smallerBlob) {
                                 downloadFile(smallerBlob || finalBlob, mimeType, selectedFile.name);
                             }, mimeType, 0.70);
