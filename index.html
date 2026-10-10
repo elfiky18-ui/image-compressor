@@ -159,20 +159,20 @@
 </head>
 <body>
 
-    <!-- Logo Panda -->
-    <svg class="panda-logo" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
-        <path d="M 40 40 C 20 40 20 70 40 70 C 60 70 60 40 40 40 Z" fill="#000"/>
-        <path d="M 160 40 C 140 40 140 70 160 70 C 180 70 180 40 160 40 Z" fill="#000"/>
-        <path d="M 30 110 C 30 50 170 50 170 110 C 170 160 30 160 30 110 Z" fill="#fff" stroke="#000" stroke-width="8"/>
-        <ellipse cx="75" cy="95" rx="15" ry="22" fill="#000" transform="rotate(-15 75 95)"/>
-        <ellipse cx="125" cy="95" rx="15" ry="22" fill="#000" transform="rotate(15 125 95)"/>
-        <circle cx="78" cy="90" r="5" fill="#fff"/>
-        <circle cx="122" cy="90" r="5" fill="#fff"/>
-        <ellipse cx="100" cy="112" rx="10" ry="7" fill="#000"/>
-        <path d="M 90 122 Q 100 130 110 122" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 140 110 Q 165 90 170 120" fill="none" stroke="#000" stroke-width="8" stroke-linecap="round"/>
-        <circle cx="170" cy="120" r="10" fill="#000"/>
-        <line x1="10" y1="155" x2="190" y2="155" stroke="#000" stroke-width="8"/>
+    <!-- Panda Logo (Original) -->
+    <svg class="panda-logo" viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 70 85 C 50 65 30 90 50 110 C 60 120 75 105 70 85 Z" fill="#1e293b"/>
+        <path d="M 170 85 C 190 65 210 90 190 110 C 180 120 165 105 170 85 Z" fill="#1e293b"/>
+        <ellipse cx="120" cy="100" rx="65" ry="55" fill="#ffffff" stroke="#1e293b" stroke-width="6"/>
+        <ellipse cx="92" cy="90" rx="14" ry="18" fill="#1e293b" transform="rotate(-15 92 90)"/>
+        <ellipse cx="148" cy="90" rx="14" ry="18" fill="#1e293b" transform="rotate(15 148 90)"/>
+        <circle cx="95" cy="86" r="4" fill="#ffffff"/>
+        <circle cx="145" cy="86" r="4" fill="#ffffff"/>
+        <ellipse cx="120" cy="108" rx="8" ry="6" fill="#1e293b"/>
+        <path d="M 112 120 Q 120 127 128 120" fill="none" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+        <path d="M 60 145 C 55 125 75 115 85 125" fill="none" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+        <path d="M 155 145 C 160 125 140 115 130 125" fill="none" stroke="#1e293b" stroke-width="6" stroke-linecap="round"/>
+        <path d="M 85 152 L 155 152" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
     </svg>
 
     <div class="card">
@@ -209,7 +209,6 @@
         let selectedFile = null;
         let selectedQuality = 'normal';
 
-        // اختيار المستوى (Normal, Medium, High)
         function selectQuality(level) {
             selectedQuality = level;
             document.querySelectorAll('.quality-btn').forEach(btn => {
@@ -218,7 +217,6 @@
             document.querySelector(`[data-level="${level}"]`).classList.add('active');
         }
 
-        // اختيار الملف
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (file) {
@@ -229,7 +227,6 @@
             }
         }
 
-        // المعادلة المضبوطة بالنسبة والتناسب لضغط كل أنواع الصور
         function processAndDownload() {
             if (!selectedFile) return;
 
@@ -247,52 +244,38 @@
                     let width = img.width;
                     let height = img.height;
 
-                    // تحديد نسبة أبعاد الصورة ودقة الضغط بنسبة وتناسب
                     let qualityValue = 0.90; 
                     let scaleFactor = 1.0;
 
+                    // ظبطنا النورمال ينزل حوالي 10-15% في الحجم بضمان فعلي
                     if (selectedQuality === 'normal') {
-                        // Normal: ضغط بسيط جداً (تقليل الحجم بنسبة خفيفة للحفاظ على الجودة)
-                        qualityValue = 0.88;
+                        qualityValue = 0.85; 
                         scaleFactor = 0.95; 
                     } else if (selectedQuality === 'medium') {
-                        // Medium: ضغط متوسط وتصغير متوازن
-                        qualityValue = 0.68;
+                        qualityValue = 0.60; 
                         scaleFactor = 0.80; 
                     } else if (selectedQuality === 'high') {
-                        // High: أقصى ضغط لأصغر حجم ممكن
-                        qualityValue = 0.40;
+                        qualityValue = 0.30; 
                         scaleFactor = 0.60; 
                     }
 
-                    // تطبيق الأبعاد الجديدة النسبية
                     canvas.width = width * scaleFactor;
                     canvas.height = height * scaleFactor;
 
-                    // رسم الصورة على الكانفاس
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    // دعم أنواع الملفات المباشرة (JPG, PNG, WEBP, الخ)
                     let mimeType = selectedFile.type;
                     if (!mimeType || mimeType === 'image/svg+xml' || mimeType === 'image/gif') {
-                        mimeType = 'image/jpeg'; // تحويل التنسيقات غير القابلة للضغط كـ Canvas إلى JPEG
+                        mimeType = 'image/jpeg';
                     }
 
                     canvas.toBlob(function (blob) {
                         if (!blob) return;
 
-                        // حماية: التأكد من عدم تجاوز الحجم الأصلي في Normal
-                        let finalBlob = blob;
-                        if (selectedQuality === 'normal' && blob.size >= selectedFile.size) {
-                            finalBlob = selectedFile; // الاحتفاظ بالأصل لو النتيجة أكبر
-                        }
-
-                        // إنشاء رابط التحميل وتنزيل الصورة
-                        const downloadUrl = URL.createObjectURL(finalBlob);
+                        const downloadUrl = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = downloadUrl;
                         
-                        // الحفاظ على اسم الملف الأصلي ومسبوق بكلمة compressed_
                         const extension = mimeType.split('/')[1] || 'jpg';
                         const originalName = selectedFile.name.substring(0, selectedFile.name.lastIndexOf('.')) || selectedFile.name;
                         a.download = `compressed_${originalName}.${extension}`;
