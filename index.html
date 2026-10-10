@@ -137,10 +137,16 @@
         .footer-links {
             margin-top: 25px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
             font-size: 13px;
             color: #64748b;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
         }
 
         .footer-links a {
@@ -152,8 +158,24 @@
             text-decoration: underline;
         }
 
+        .support-info {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
         input[type="file"] {
             display: none;
+        }
+
+        /* Modal / About Section styling */
+        .about-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 15px;
+            max-width: 400px;
+            line-height: 1.5;
+            text-align: center;
+            padding: 0 10px;
         }
     </style>
 </head>
@@ -199,10 +221,20 @@
         </button>
     </div>
 
+    <!-- About / Trial Notice -->
+    <div class="about-text">
+        Panda Image Compressor compresses all types of images efficiently. Please note that this is a <strong>trial phase</strong> and the service is <strong>not free</strong>.
+    </div>
+
     <div class="footer-links">
-        <a href="About Us.html">Privacy Policy</a>
-        <span>|</span>
-        <a href="About Us.html">About Us</a>
+        <div class="nav-links">
+            <a href="About Us.html">Privacy Policy</a>
+            <span>|</span>
+            <a href="About Us.html">About Us</a>
+        </div>
+        <div class="support-info">
+            Support: support@pandacompressor.com
+        </div>
     </div>
 
     <script>
@@ -249,7 +281,7 @@
 
                     if (selectedQuality === 'normal') {
                         qualityValue = 0.82; 
-                        scaleFactor = 0.90; // يقلل بنسبة ~10% أكيدة
+                        scaleFactor = 0.90; 
                     } else if (selectedQuality === 'medium') {
                         qualityValue = 0.55; 
                         scaleFactor = 0.75; 
