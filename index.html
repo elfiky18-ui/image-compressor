@@ -1,318 +1,311 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Image Compressor</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #eef2f3; 
-            text-align: center; 
-            padding: 40px 15px; 
-            margin: 0; 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .container { 
-            background: white; 
-            max-width: 450px; 
-            margin: 0 auto; 
-            padding: 30px 25px; 
-            border-radius: 12px; 
-            box-shadow: 0px 8px 20px rgba(0,0,0,0.08); 
+
+        body {
+            background-color: #f3f6f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .logo {
-            width: 140px; 
-            height: auto; 
-            border-radius: 10px; 
-            margin-bottom: 10px;
-        }
-        h2 {
-            margin-top: 0;
-            color: #2c3e50;
-        }
-        p.subtitle {
-            color: #666;
-            font-size: 14px;
+
+        .panda-logo {
+            width: 140px;
             margin-bottom: 15px;
         }
-        
-        /* تنسيق خط خيارات الجودة */
-        .quality-selector {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            background: #f1f5f9;
-            padding: 5px;
-            border-radius: 8px;
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 420px;
+            padding: 25px 20px;
+            text-align: center;
         }
-        .quality-option {
-            flex: 1;
+
+        .title {
+            color: #1e293b;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
-        .quality-option input {
-            display: none;
-        }
-        .quality-option label {
-            display: block;
-            padding: 6px 10px;
-            font-size: 13px;
-            font-weight: 600;
+
+        .subtitle {
             color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Quality Options */
+        .quality-options {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .quality-btn {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
             background: transparent;
-            border-radius: 6px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .quality-option input:checked + label {
+
+        .quality-btn.active {
             background: #ffffff;
-            color: #007bff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            color: #2563eb;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
-        /* منطقة رفع الصور */
-        .upload-area {
+        /* Dropzone Box */
+        .dropzone {
             border: 2px dashed #cbd5e1;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px 15px;
             margin-bottom: 20px;
-        }
-        .file-input-hidden {
-            display: none;
-        }
-        .btn-press {
-            display: inline-block;
-            background: #ffffff;
-            color: #334155;
-            border: 1px solid #cbd5e1;
-            padding: 10px 28px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 15px;
+            background-color: #fafafa;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: border-color 0.2s;
         }
-        .btn-press:hover {
-            background: #f1f5f9;
-            border-color: #94a3b8;
+
+        .dropzone:hover {
+            border-color: #2563eb;
         }
-        .file-name {
-            display: block;
-            margin-top: 10px;
+
+        .press-btn {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 8px 24px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .file-info {
+            color: #94a3b8;
             font-size: 13px;
-            color: #64748b;
-            word-break: break-all;
         }
-        /* زر الضغط والتحميل */
-        .btn { 
-            background: #007bff; 
-            color: white; 
-            border: none; 
-            padding: 12px 20px; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            font-weight: bold;
-            width: 100%; 
+
+        /* Download Button */
+        .action-btn {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 14px 0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
             transition: background 0.2s;
         }
-        .btn:hover { 
-            background: #0056b3; 
+
+        .action-btn:hover {
+            background-color: #0056b3;
         }
-        #result { 
-            margin-top: 20px; 
+
+        .action-btn:disabled {
+            background-color: #cbd5e1;
+            cursor: not-allowed;
         }
-        /* الفوتر والروابط */
-        footer {
+
+        /* Footer Links */
+        .footer-links {
             margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             font-size: 13px;
+            color: #64748b;
         }
-        footer a {
+
+        .footer-links a {
             color: #64748b;
             text-decoration: none;
-            margin: 0 10px;
-            cursor: pointer;
-            transition: color 0.2s;
         }
-        footer a:hover {
-            color: #007bff;
+
+        .footer-links a:hover {
             text-decoration: underline;
         }
-        /* النوافذ المنبثقة (Modals) */
-        .modal {
+
+        input[type="file"] {
             display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 600px;
-            width: 90%;
-            text-align: left;
-            direction: ltr;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            line-height: 1.8;
-            color: #333;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #666;
-        }
-        .close-btn:hover {
-            color: #000;
         }
     </style>
 </head>
 <body>
 
-    <!-- الشعار -->
-    <img src="00000.jpg" alt="Panda Logo" class="logo" />
+    <!-- Logo Panda -->
+    <svg class="panda-logo" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 40 40 C 20 40 20 70 40 70 C 60 70 60 40 40 40 Z" fill="#000"/>
+        <path d="M 160 40 C 140 40 140 70 160 70 C 180 70 180 40 160 40 Z" fill="#000"/>
+        <path d="M 30 110 C 30 50 170 50 170 110 C 170 160 30 160 30 110 Z" fill="#fff" stroke="#000" stroke-width="8"/>
+        <ellipse cx="75" cy="95" rx="15" ry="22" fill="#000" transform="rotate(-15 75 95)"/>
+        <ellipse cx="125" cy="95" rx="15" ry="22" fill="#000" transform="rotate(15 125 95)"/>
+        <circle cx="78" cy="90" r="5" fill="#fff"/>
+        <circle cx="122" cy="90" r="5" fill="#fff"/>
+        <ellipse cx="100" cy="112" rx="10" ry="7" fill="#000"/>
+        <path d="M 90 122 Q 100 130 110 122" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+        <path d="M 140 110 Q 165 90 170 120" fill="none" stroke="#000" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="170" cy="120" r="10" fill="#000"/>
+        <line x1="10" y1="155" x2="190" y2="155" stroke="#000" stroke-width="8"/>
+    </svg>
 
-    <div class="container">
-        <h2>Panda Image Compressor</h2>
+    <div class="card">
+        <h1 class="title">Panda Image Compressor</h1>
         <p class="subtitle">Press it easily</p>
-        
-        <!-- خيارات الجودة -->
-        <div class="quality-selector">
-            <div class="quality-option">
-                <input type="radio" id="qLow" name="quality" value="0.4">
-                <label for="qLow">Normal</label>
-            </div>
-            <div class="quality-option">
-                <input type="radio" id="qMedium" name="quality" value="0.7" checked>
-                <label for="qMedium">Medium</label>
-            </div>
-            <div class="quality-option">
-                <input type="radio" id="qHigh" name="quality" value="0.9">
-                <label for="qHigh">High</label>
-            </div>
+
+        <!-- Quality Selectors -->
+        <div class="quality-options">
+            <button class="quality-btn active" data-level="normal" onclick="selectQuality('normal')">Normal</button>
+            <button class="quality-btn" data-level="medium" onclick="selectQuality('medium')">Medium</button>
+            <button class="quality-btn" data-level="high" onclick="selectQuality('high')">High</button>
         </div>
 
-        <!-- منطقة اختيارات الملفات -->
-        <div class="upload-area">
-            <input type="file" id="upload" accept="image/*" class="file-input-hidden" onchange="showFileName()">
-            <label for="upload" class="btn-press">Press</label>
-            <span id="fileName" class="file-name">No file chosen</span>
+        <!-- File Upload Area -->
+        <div class="dropzone" onclick="document.getElementById('fileInput').click()">
+            <button class="press-btn" type="button">Press</button>
+            <div class="file-info" id="fileInfo">No file chosen</div>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
-        <button class="btn" onclick="compressImage()">Click and download the image</button>
-        
-        <div id="result"></div>
+        <!-- Action Button -->
+        <button class="action-btn" id="downloadBtn" onclick="processAndDownload()" disabled>
+            Click and download the image
+        </button>
     </div>
 
-    <!-- الفوتر -->
-    <footer>
-        <a onclick="openModal('privacyModal')">Privacy Policy</a> | 
-        <a onclick="openModal('aboutModal')">About Us</a>
-    </footer>
-
-    <!-- نافذة Privacy Policy -->
-    <div id="privacyModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('privacyModal')">&times;</span>
-            <h1>Privacy Policy</h1>
-            <p>At Panda Image Compressor, we respect your privacy. All images uploaded for processing are handled securely and are never stored, shared, or used for any other purposes.</p>
-            <p>We use third-party advertising companies (such as Google AdSense) to serve ads when you visit our website. These companies may use information about your visits to this and other websites to provide advertisements about goods and services of interest to you.</p>
-        </div>
+    <div class="footer-links">
+        <a href="About Us.html">Privacy Policy</a>
+        <span>|</span>
+        <a href="About Us.html">About Us</a>
     </div>
-
-    <!-- نافذة About Us (رابط Gmail المباشر) -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('aboutModal')">&times;</span>
-            <h1>About Us</h1>
-            <p>Welcome to Panda Image Compressor, your ultimate fast and free online tool to compress and resize your images without losing their original quality.</p>
-            <p>Our goal is to provide fast, reliable, and user-friendly web tools for designers, content creators, and everyone looking to optimize their images with a single click.</p>
-            <p><strong>Contact Us:</strong> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=elfiky18@gmail.com" target="_blank" style="color: #007bff; text-decoration: none;">elfiky18@gmail.com</a></p>
-        </div>
-    </div>
-
-    <canvas id="canvas" style="display:none;"></canvas>
 
     <script>
-    function showFileName() {
-        const fileInput = document.getElementById('upload');
-        const fileNameSpan = document.getElementById('fileName');
-        if (fileInput.files.length > 0) {
-            fileNameSpan.textContent = fileInput.files[0].name;
-            fileNameSpan.style.color = "#0f172a";
-        } else {
-            fileNameSpan.textContent = "No file chosen";
-            fileNameSpan.style.color = "#64748b";
-        }
-    }
+        let selectedFile = null;
+        let selectedQuality = 'normal';
 
-    function openModal(modalId) {
-        document.getElementById(modalId).style.display = 'flex';
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).style.display = 'none';
-    }
-
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = "none";
-        }
-    }
-
-    function compressImage() {
-        const fileInput = document.getElementById('upload');
-        const resultDiv = document.getElementById('result');
-        
-        if (fileInput.files.length === 0) {
-            alert('Please press and select an image first!');
-            return;
+        // اختيار المستوى (Normal, Medium, High)
+        function selectQuality(level) {
+            selectedQuality = level;
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-level="${level}"]`).classList.add('active');
         }
 
-        const selectedQuality = document.querySelector('input[name="quality"]:checked').value;
-        
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        
-        reader.onload = function(event) {
-            const img = new Image();
-            img.src = event.target.result;
-            
-            img.onload = function() {
-                const canvas = document.getElementById('canvas');
-                const ctx = canvas.getContext('2d');
-                
-                const scaleFactor = 0.7;
-                canvas.width = img.width * scaleFactor;
-                canvas.height = img.height * scaleFactor;
-                
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                
-                const compressedDataUrl = canvas.toDataURL('image/jpeg', parseFloat(selectedQuality));
-                
-                resultDiv.innerHTML = `
-                    <p style="color: #28a745; font-weight: bold;">Successfully compressed!</p>
-                    <a href="${compressedDataUrl}" download="compressed_panda.jpg" class="btn" style="background: #28a745; text-decoration: none; display: inline-block; margin-top: 10px;">Click and download the image</a>
-                `;
+        // اختيار الملف
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = file;
+                const sizeKB = (file.size / 1024).toFixed(1);
+                document.getElementById('fileInfo').innerText = `${file.name} (${sizeKB} KB)`;
+                document.getElementById('downloadBtn').disabled = false;
             }
         }
-        reader.readAsDataURL(file);
-    }
-    </script>
 
+        // المعادلة المضبوطة بالنسبة والتناسب لضغط كل أنواع الصور
+        function processAndDownload() {
+            if (!selectedFile) return;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(selectedFile);
+
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    let width = img.width;
+                    let height = img.height;
+
+                    // تحديد نسبة أبعاد الصورة ودقة الضغط بنسبة وتناسب
+                    let qualityValue = 0.90; 
+                    let scaleFactor = 1.0;
+
+                    if (selectedQuality === 'normal') {
+                        // Normal: ضغط بسيط جداً (تقليل الحجم بنسبة خفيفة للحفاظ على الجودة)
+                        qualityValue = 0.88;
+                        scaleFactor = 0.95; 
+                    } else if (selectedQuality === 'medium') {
+                        // Medium: ضغط متوسط وتصغير متوازن
+                        qualityValue = 0.68;
+                        scaleFactor = 0.80; 
+                    } else if (selectedQuality === 'high') {
+                        // High: أقصى ضغط لأصغر حجم ممكن
+                        qualityValue = 0.40;
+                        scaleFactor = 0.60; 
+                    }
+
+                    // تطبيق الأبعاد الجديدة النسبية
+                    canvas.width = width * scaleFactor;
+                    canvas.height = height * scaleFactor;
+
+                    // رسم الصورة على الكانفاس
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // دعم أنواع الملفات المباشرة (JPG, PNG, WEBP, الخ)
+                    let mimeType = selectedFile.type;
+                    if (!mimeType || mimeType === 'image/svg+xml' || mimeType === 'image/gif') {
+                        mimeType = 'image/jpeg'; // تحويل التنسيقات غير القابلة للضغط كـ Canvas إلى JPEG
+                    }
+
+                    canvas.toBlob(function (blob) {
+                        if (!blob) return;
+
+                        // حماية: التأكد من عدم تجاوز الحجم الأصلي في Normal
+                        let finalBlob = blob;
+                        if (selectedQuality === 'normal' && blob.size >= selectedFile.size) {
+                            finalBlob = selectedFile; // الاحتفاظ بالأصل لو النتيجة أكبر
+                        }
+
+                        // إنشاء رابط التحميل وتنزيل الصورة
+                        const downloadUrl = URL.createObjectURL(finalBlob);
+                        const a = document.createElement('a');
+                        a.href = downloadUrl;
+                        
+                        // الحفاظ على اسم الملف الأصلي ومسبوق بكلمة compressed_
+                        const extension = mimeType.split('/')[1] || 'jpg';
+                        const originalName = selectedFile.name.substring(0, selectedFile.name.lastIndexOf('.')) || selectedFile.name;
+                        a.download = `compressed_${originalName}.${extension}`;
+
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(downloadUrl);
+
+                    }, mimeType, qualityValue);
+                };
+            };
+        }
+    </script>
 </body>
 </html>
